@@ -25,3 +25,4 @@ Advance Web Programming Project made with ASP.NET MVC
 8. You can compete your course level with other users by the leaderboard feature of the app.
 9. JavaScript code that track your time in a topic, that if you reach 30 seconds that still on the page will make that topic mark as read.
 10. Some courses like algebra and sets are hard to predict answer because of ordering and some unexpected spaces. The system will check for that and your input will consider it correct even in different ordering and some random spacing as long as it is match to the answer.
+11. There is a test feature that you can specify the topics, items and difficulty of a quiz you want to take.
