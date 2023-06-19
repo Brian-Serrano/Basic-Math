@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Achievements";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<div class="container">
+    <div class="row">
+        @for (int i = 0; i < Model.GetTitle().Count; i++)
+        {
+            <div class="col-xl-12">
+                <div class="card mb-3 card-body">
+                    <div class="row align-items-center">
+                        <div class="col-auto image-container">
+                            <img src="@Url.Content(Model.GetImagePath()[i])" alt="" width="138" height="113" class="d-none" />
+                            <div class="image-text d-none">@Model.GetImageText()[i]</div>
+                            <canvas></canvas>
+                        </div>
+                        <div class="col">
+                            <div class="overflow-hidden flex-nowrap">
+                                @if (ViewBag.Data.CompletedAchievements[i] == 0)
+                                {
+                                    <div class="flex-shrink-0 text-end">
+                                        <span class="float-end">
+                                            <i class="bi bi-grid-3x3-gap-fill" style="font-size: 24px;"></i>
+                                        </span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="flex-shrink-0 text-end">
+                                        <span class="float-end">
+                                            <i class="bi bi-check-circle-fill text-success" style="font-size: 24px;"></i>
+                                        </span>
+                                    </div>
+                                }
+                                <h6 class="mb-1">
+                                    @Model.GetTitle()[i]
+                                </h6>
+                                <span class="text-muted d-block mb-2 small">
+                                    @Model.GetDescription()[i]
+                                </span>
+                                @{ 
+                                    int progress = Model.GetProgress()[i] > 100 ? 100 : (int)Math.Round(Model.GetProgress()[i]);
+                                }
+                                <div class="row align-items-center">
+                                    <div class="col-12">
+                                        <div class="row align-items-center g-0">
+                                            <div class="col-auto">
+                                                <small class="me-2">@progress%</small>
+                                            </div>
+                                            <div class="col">
+                                                <div class="progress bg-tint-success" style="height: 4px;">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: @progress%;" aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        window.addEventListener('load', function () {
+            var canvasList = document.querySelectorAll('canvas');
+            var imageList = document.querySelectorAll('img');
+            var imageTextList = document.querySelectorAll('.image-text');
+            var fontSize = 15;
+            var lineHeight = 20;
+
+            for (var i = 0; i < canvasList.length; i++) {
+                var context = canvasList[i].getContext('2d');
+
+                canvasList[i].width = imageList[i].width;
+                canvasList[i].height = imageList[i].height;
+                context.drawImage(imageList[i], 0, 0, imageList[i].width, imageList[i].height);
+
+                context.font = 'bold ' + fontSize + 'px Comic Sans MS';
+                context.fillStyle = '#003300';
+                context.textAlign = "center";
+
+                var maxWidth = canvasList[i].width - lineHeight;
+                var text = imageTextList[i].textContent;
+
+                var lines = getLines(context, text, maxWidth);
+
+                for (var j = 0; j < lines.length; j++) {
+                    var x = canvasList[i].width / 2;
+                    var y = ((canvasList[i].height - (lines.length * lineHeight)) / 2) + (j * lineHeight) + fontSize;
+                    context.fillText(lines[j], x, y);
+                }
+            }
+
+            function getLines(ctx, text, maxWidth) {
+                var words = text.split(" ");
+                var lines = [];
+                var currentLine = words[0];
+
+                for (var i = 1; i < words.length; i++) {
+                    var word = words[i];
+                    var width = ctx.measureText(currentLine + " " + word).width;
+                    if (width < maxWidth) {
+                        currentLine += " " + word;
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word;
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+        });
+    </script>
+}

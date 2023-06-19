@@ -1,0 +1,39 @@
+<p>In mathematics, permutation refers to the arrangement of objects or events in a specific order. Permutation probabilities are used to calculate the likelihood of obtaining a particular arrangement or order of elements from a given set. The formula for calculating permutation probabilities depends on whether repetition is allowed or not. Let's discuss both cases and provide examples:</p>
+<ol>
+    <li>
+        <p>Permutation without Repetition:</p>
+        <p>When dealing with permutation probabilities without repetition, each element can only be used once in the arrangement. The number of possible permutations is given by the factorial of the total number of elements being arranged.</p>
+        <p>The formula for permutation without repetition is:</p>
+        <ul>
+            <li>P(n, r) = <span class="fraction-container"><span class="fraction"><span class="numerator">n!</span><span class="denominator">(n - r)!</span></span></span></li>
+        </ul>
+        <p>where P(n, r) represents the number of permutations of r objects chosen from a set of n objects.</p>
+        <p>Example:</p>
+        <p>Consider a race with 5 participants, and we want to calculate the probability of obtaining a specific order of the first three finishers. The number of permutations of 3 participants chosen from a set of 5 participants is given by:</p>
+        <ul>
+            <li>P(5, 3) = <span class="fraction-container"><span class="fraction"><span class="numerator">5!</span><span class="denominator">(5 - 3)!</span></span></span></li>
+            <li>= <span class="fraction-container"><span class="fraction"><span class="numerator">5!</span><span class="denominator">2!</span></span></span></li>
+            <li>= 5 * 4 * 3</li>
+            <li>= 60</li>
+        </ul>
+        <p>So, there are 60 possible permutations of the first three finishers in the race.</p>
+    </li>
+    <li>
+        <p>Permutation with Repetition:</p>
+        <p>When dealing with permutation probabilities with repetition, some elements may be repeated in the arrangement. The formula for permutation with repetition involves the total number of objects and the number of times each object is repeated.</p>
+        <p>The formula for permutation with repetition is:</p>
+        <ul>
+            <li>P(n, r1, r2, ..., rk) = <span class="fraction-container"><span class="fraction"><span class="numerator">n!</span><span class="denominator">r1! * r2! * ... * rk!</span></span></span></li>
+        </ul>
+        <p>where P(n, r1, r2, ..., rk) represents the number of permutations of n objects with r1 identical objects of type 1, r2 identical objects of type 2, and so on, up to rk identical objects of type k.</p>
+        <p>Example:</p>
+        <p>Consider the word "MATH" and we want to calculate the probability of obtaining a specific arrangement of the letters. Since there are no repeated letters, we can use the formula for permutation without repetition. The number of permutations of the word "MATH" is given by:</p>
+        <ul>
+            <li>P(4, 4) = <span class="fraction-container"><span class="fraction"><span class="numerator">4!</span><span class="denominator">(4 - 4)!</span></span></span></li>
+            <li>= <span class="fraction-container"><span class="fraction"><span class="numerator">4!</span><span class="denominator">0!</span></span></span></li>
+            <li>= 4!</li>
+        </ul>
+        <p>So, there are 4! = 4 * 3 * 2 * 1 = 24 possible permutations of the letters in the word "MATH".</p>
+    </li>
+</ol>
+<p>Permutation probabilities provide a way to determine the number of possible arrangements of objects or events. They are particularly useful in combinatorics and help in solving problems related to arranging elements in a specific order.</p>

@@ -1,0 +1,172 @@
+﻿@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<div class="py-8">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card" style="width: 100%;">
+                    <div class="card-body">
+                        <h5 class="card-title">@ViewBag.Data.Username</h5>
+                        <p class="card-text">Score: @ViewBag.Data.Score</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Total Score: @ViewBag.Data.TotalScore</li>
+                        <li class="list-group-item">Achievements Completed: @Array.FindAll((int[])ViewBag.Data.CompletedAchievements, element => element == 1).Length</li>
+                        <li class="list-group-item">Quiz Taken: @ViewBag.Data.QuizTaken</li>
+                        <li class="list-group-item">Passed: @ViewBag.Data.QuizCompleted</li>
+                        <li class="list-group-item">Failed: @ViewBag.Data.QuizFailed</li>
+                    </ul>
+                </div>
+                <hr />
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+            @for (int i = 0; i < ViewBag.Courses.Count; i++)
+            {
+                <div class="col">
+                    <div class="card card-hover h-100">
+                        <img src="@Url.Content("~/Assets/book.png")" alt="" width="235" height="375" class="d-none" />
+                        <div class="image-text d-none">@ViewBag.Courses[i].Display</div>
+                        <canvas class="mb-4 col-12"></canvas>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                @if (ViewBag.Data.CollectedCertificate[i] == 0)
+                                {
+                                    <span class="badge bg-primary">Certificate Not Owned</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Certificate Owned</span>
+                                }
+                                @if (ViewBag.Data.Levels[i] == 0)
+                                {
+                                    <i class="bi bi-x-circle-fill text-primary"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                }
+                            </div>
+                            <h4 class="mb-2 text-truncate-line-2 ">
+                                @ViewBag.Courses[i].Display
+                            </h4>
+
+                            @if (ViewBag.Data.Levels[i] == 0)
+                            {
+                                <small>Total Score: Locked</small>
+                                <div class="lh-1 mt-3">
+                                    <span class="fs-6 text-muted">Level: </span>
+                                    <span class="text-warning">Locked</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <small>Total Score: @ViewBag.Data.CourseScore[i]</small>
+                                <div class="lh-1 mt-3">
+                                    <span class="fs-6 text-muted">Level: </span>
+                                    <span class="text-warning">@ViewBag.Data.Levels[i]</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="card-footer">
+                            <div class="row align-items-center g-0">
+                                <div class="col">
+                                    <div class="row align-items-center g-0">
+                                        <div class="col-auto">
+                                            <small class="me-2">Topics</small>
+                                        </div>
+                                        <div class="col">
+                                            <div class="progress bg-tint-success" style="height:4px; width:50%;">
+                                                @{
+                                                    List<int> topicsRead = ViewBag.Data.TopicsRead[i];
+                                                    float percent = (float)topicsRead.FindAll(x => x == 1).Count / topicsRead.Count * 100;
+                                                }
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: @percent%;" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (ViewBag.Data.Levels[i] == 0)
+                                {
+                                    <div class="col-auto">
+                                        <span class="btn btn-primary">
+                                            Course is Locked
+                                        </span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-auto">
+                                        <a href="@Url.Action("Dashboard", "Course", new { Id = ViewBag.Courses[i].Id })" class="btn btn-success">
+                                            View Course
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        window.addEventListener('load', function () {
+            var canvasList = document.querySelectorAll('canvas');
+            var imageList = document.querySelectorAll('img');
+            var imageTextList = document.querySelectorAll('.image-text');
+            var fontSize = 25;
+            var lineHeight = 30;
+
+            for (var i = 0; i < canvasList.length; i++) {
+                var context = canvasList[i].getContext('2d');
+
+                canvasList[i].width = imageList[i].width;
+                canvasList[i].height = imageList[i].height;
+                context.drawImage(imageList[i], 0, 0, imageList[i].width, imageList[i].height);
+
+                context.font = 'bold ' + fontSize + 'px Serif';
+                context.fillStyle = '#262626';
+                context.textAlign = "center";
+
+                var maxWidth = canvasList[i].width - lineHeight;
+                var text = imageTextList[i].textContent;
+
+                var lines = getLines(context, text, maxWidth);
+
+                for (var j = 0; j < lines.length; j++) {
+                    var x = canvasList[i].width / 2;
+                    var y = ((canvasList[i].height - (lines.length * lineHeight)) / 2) + (j * lineHeight) + fontSize;
+                    context.fillText(lines[j], x, y);
+                }
+            }
+
+            function getLines(ctx, text, maxWidth) {
+                var words = text.split(" ");
+                var lines = [];
+                var currentLine = words[0];
+
+                for (var i = 1; i < words.length; i++) {
+                    var word = words[i];
+                    var width = ctx.measureText(currentLine + " " + word).width;
+                    if (width < maxWidth) {
+                        currentLine += " " + word;
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word;
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+        });
+    </script>
+}

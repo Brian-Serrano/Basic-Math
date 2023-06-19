@@ -1,0 +1,31 @@
+﻿@model Advance_Web_Programming_Project.Models.Quizzes.Quiz
+
+@{
+    ViewBag.Title = "Quiz";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+@using (Html.BeginForm("TestQuiz", "Home", FormMethod.Post))
+{
+    for (int i = 0; i < Model.Components.Count; i++)
+    {
+        <div class="card m-2 p-3">
+            @{
+                string questionName = "Question " + (i + 1);
+                <h4>@questionName</h4>
+                <p>@Html.Raw(Model.Components[i][0])</p>
+                <p>@Model.Components[i][2]</p>
+                <h4>Answer: </h4>
+                @Html.HiddenFor(m => m.Components[i][0])
+                @Html.HiddenFor(m => m.Components[i][1])
+                @Html.HiddenFor(m => m.Components[i][2])
+                @Html.Hidden("Id", Model.Id[i])
+                @Html.TextBoxFor(m => m.Input[i], new { @class = "form-control" })
+                <br />
+            }
+        </div>
+    }
+
+    <input type="submit" value="Submit Answer" name="submit" class="btn btn-success" />
+}

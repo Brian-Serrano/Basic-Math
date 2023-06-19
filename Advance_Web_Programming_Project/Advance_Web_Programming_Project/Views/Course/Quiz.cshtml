@@ -1,0 +1,48 @@
+﻿@model Advance_Web_Programming_Project.Models.Quizzes.Quiz
+
+@{
+    ViewBag.Title = ViewBag.Courses[Model.Id[0]].Display + " Quiz";
+}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Dashboard", "Course", new { Id = ViewBag.Courses[Model.Id[0]].Id })">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("StartTopic", "Course", new { Id = ViewBag.Courses[Model.Id[0]].Id })">Topic</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="@Url.Action("StartQuiz", "Course", new { Id = ViewBag.Courses[Model.Id[0]].Id })">Quiz</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Leaderboard", "Course", new { Id = ViewBag.Courses[Model.Id[0]].Id })">Leaderboard</a>
+    </li>
+</ul>
+
+<br />
+<br />
+<h2>@ViewBag.Title</h2>
+<hr />
+@using (Html.BeginForm("Quiz", "Course", FormMethod.Post))
+{
+    for (int i = 0; i < Model.Components.Count; i++)
+    {
+        <div class="card m-2 p-3">
+            @{
+                string questionName = "Question " + (i + 1);
+                <h4>@questionName</h4>
+                <p>@Html.Raw(Model.Components[i][0])</p>
+                <p>@Model.Components[i][2]</p>
+                <h4>Answer: </h4>
+                @Html.HiddenFor(m => m.Components[i][0])
+                @Html.HiddenFor(m => m.Components[i][1])
+                @Html.HiddenFor(m => m.Components[i][2])
+                @Html.Hidden("Id", Model.Id[i])
+                @Html.TextBoxFor(m => m.Input[i], new { @class = "form-control" })
+                <br />
+            }
+        </div>
+    }
+
+    <input type="submit" value="Submit Answer" name="submit" class="btn btn-success" />
+}

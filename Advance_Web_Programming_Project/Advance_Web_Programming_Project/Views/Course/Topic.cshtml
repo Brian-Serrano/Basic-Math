@@ -1,0 +1,84 @@
+﻿<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Dashboard", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="@Url.Action("StartTopic", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Topic</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("StartQuiz", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Quiz</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Leaderboard", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Leaderboard</a>
+    </li>
+</ul>
+
+<br />
+<br />
+
+<h2>Lesson @(Model.TopicId + 1): @Model.TopicTitle</h2>
+<hr />
+@Html.Raw(File.ReadAllText(Server.MapPath(Model.TopicPath)))
+<br /><br /><hr />
+<div class="bd-example">
+    <nav aria-label="Another pagination example">
+        <ul class="pagination pagination-lg flex-wrap">
+            @if (Model.TopicId <= 0)
+            {
+                <li class="page-item">
+                    <span class="page-link text-muted">Previous</span>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Topic", "Course", new { Id = Model.Id, Topics = Model.TopicId - 1 })">Previous</a>
+                </li>
+            }
+            @for (int i = 0; i < Model.TopicAmount; i++)
+            {
+                <li class="page-item">
+                    <a class="page-link @(Model.TopicId == i ? "active" : "")" href="@Url.Action("Topic", "Course", new { Id = Model.Id, Topics = i })">@(i + 1)</a>
+                </li>
+            }
+            @if (Model.TopicId >= Model.TopicAmount - 1)
+            {
+                <li class="page-item">
+                    <span class="page-link text-muted">Next</span>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Topic", "Course", new { Id = Model.Id, Topics = Model.TopicId + 1 })">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+@section scripts {
+    <script>
+    var startTime;
+
+    window.onload = function () {
+        startTime = new Date();
+    };
+
+    window.onbeforeunload = function () {
+        var endTime = new Date();
+        var timeSpent = endTime - startTime;
+        $.ajax({
+            url: '/Course/TrackTime',
+            type: 'POST',
+            data: { timeSpent: timeSpent, topicId: @Model.Id, lessonId: @Model.TopicId },
+            success: function (response) {
+                console.log('Time tracked successfully.');
+            },
+            error: function (xhr, status, error) {
+                console.log('Error tracking time: ' + error);
+            }
+        });
+    };
+    </script>
+}

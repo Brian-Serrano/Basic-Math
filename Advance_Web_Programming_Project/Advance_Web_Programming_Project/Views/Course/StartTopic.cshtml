@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Topics";
+}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Dashboard", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="@Url.Action("StartTopic", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Topic</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("StartQuiz", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Quiz</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Leaderboard", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Leaderboard</a>
+    </li>
+</ul>
+
+<br />
+<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12 mb-3 mb-lg-5">
+            <div class="card">
+                <div class="d-flex card-header justify-content-between">
+                    <h5 class="m-0">@ViewBag.Title</h5>
+                    <h5 class="m-0">Status</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        @for (int i = 0; i < Model.TopicId.Count; i++)
+                        {
+                            <li class="list-group-item pt-0">
+                                <a href="@Url.Action("Topic", "Course", new { Id = Model.Id, Topics = int.Parse(Model.TopicId[i]) })" class="no-underline text-black">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-3 image-container">
+                                            <img src="@Url.Content("~/Assets/lightbulb.png")" alt="" width="100" height="100" class="d-none" />
+                                            <div class="image-text d-none">@Model.TopicTitle[i]</div>
+                                            <canvas></canvas>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-0">@Model.TopicTitle[i]</h6>
+                                            <p class="mb-0 text-muted">@Model.TopicDescription[i]</p>
+                                        </div>
+                                        <div class="flex-shrink-0 text-end">
+                                            @{
+                                                string icon = ViewBag.Data.TopicsRead[Model.Id][int.Parse(Model.TopicId[i])] == 0 ? "bi-eye-fill text-secondary" : "bi-check-circle-fill text-success";
+                                            }
+                                            <span>
+                                                <i class="bi @icon"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        window.addEventListener('load', function () {
+            var canvasList = document.querySelectorAll('canvas');
+            var imageList = document.querySelectorAll('img');
+            var imageTextList = document.querySelectorAll('.image-text');
+            var fontSize = 15;
+            var lineHeight = 20;
+
+            for (var i = 0; i < canvasList.length; i++) {
+                var context = canvasList[i].getContext('2d');
+
+                canvasList[i].width = imageList[i].width;
+                canvasList[i].height = imageList[i].height;
+                context.drawImage(imageList[i], 0, 0, imageList[i].width, imageList[i].height);
+
+                context.font = 'bold ' + fontSize + 'px Comic Sans MS';
+                context.fillStyle = '#003300';
+                context.textAlign = "center";
+
+                var maxWidth = canvasList[i].width - lineHeight;
+                var text = imageTextList[i].textContent;
+
+                var lines = getLines(context, text, maxWidth);
+
+                for (var j = 0; j < lines.length; j++) {
+                    var x = canvasList[i].width / 2;
+                    var y = ((canvasList[i].height - (lines.length * lineHeight)) / 2) + (j * lineHeight) + fontSize;
+                    context.fillText(lines[j], x, y);
+                }
+            }
+
+            function getLines(ctx, text, maxWidth) {
+                var words = text.split(" ");
+                var lines = [];
+                var currentLine = words[0];
+
+                for (var i = 1; i < words.length; i++) {
+                    var word = words[i];
+                    var width = ctx.measureText(currentLine + " " + word).width;
+                    if (width < maxWidth) {
+                        currentLine += " " + word;
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word;
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+        });
+    </script>
+}

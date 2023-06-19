@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - @ViewBag.Website</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top m-0">
+        <div class="container-xl">
+            <a href="@Url.Action("Index", "Home")" class="navbar-brand">Basic Math</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar" aria-controls="myNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Home")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("ProfileStats", "Home")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "ProfileStats" ? "active" : "")">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("Test", "Home")" class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Test" ? "active" : "")">Test</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="myDropdown" data-bs-toggle="dropdown">More</a>
+                        <ul class="dropdown-menu" aria-labelledby="myDropdown">
+                            <li><a href="@Url.Action("Achievement", "Home")" class="dropdown-item @(ViewContext.RouteData.Values["action"].ToString() == "Achievement" ? "active" : "")">Achievement</a></li>
+                            <li><a href="@Url.Action("Logout", "Home")" class="dropdown-item">Log Out</a></li>
+                            <li><a href="@Url.Action("BuyCourses", "Home")" class="dropdown-item @(ViewContext.RouteData.Values["action"].ToString() == "BuyCourses" ? "active" : "")">Buy Course</a></li>
+                            <li><a href="@Url.Action("Collections", "Home")" class="dropdown-item @(ViewContext.RouteData.Values["action"].ToString() == "Collections" ? "active" : "")">Collections</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <span class="text-white d-none d-lg-block">Welcome @ViewBag.Data.Username</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white col-lg-3 p-0 m-0 position-sticky">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light m-0 p-0">
+                    <div class="container-xl p-lg-0">
+                        <span class="d-lg-none navbar-brand my-2">Courses</span>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <div class="list-group list-group-flush border-bottom scrollarea">
+                                @for (int i = 0; i < ViewBag.Courses.Count; i++)
+                                {
+                                    if (ViewBag.Data.Levels[i] == 0)
+                                    {
+                                        <div class="list-group-item list-group-item-action py-3 lh-tight">
+                                            <div class="d-flex w-100 align-items-center justify-content-between">
+                                                <strong class="mb-1 text-muted">@ViewBag.Courses[i].Display</strong>
+                                                <small> <i class="bi bi-lock-fill text-dark"></i></small>
+                                            </div>
+                                            <div class="col-10 mb-1 small text-muted">@ViewBag.Courses[i].TagLine</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        string active = string.Empty;
+                                        if (ViewContext.RouteData.Values["id"] != null)
+                                        {
+                                            active = ViewContext.RouteData.Values["id"].ToString() == ViewBag.Courses[i].Id.ToString() ? "active" : "";
+                                        }
+                                        <a href="@Url.Action("Dashboard", "Course", new { Id = ViewBag.Courses[i].Id })" class="list-group-item list-group-item-action py-3 lh-tight @active">
+                                            <div class="d-flex w-100 align-items-center justify-content-between">
+                                                <strong class="mb-1">@ViewBag.Courses[i].Display</strong>
+                                                <small>@ViewBag.Data.Levels[i].ToString() <i class="bi bi-star-fill text-warning"></i></small>
+                                            </div>
+                                            <div class="col-10 mb-1 small">@ViewBag.Courses[i].TagLine</div>
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="p-5 col-lg-9">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - @ViewBag.Website - All Rights Reserved</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

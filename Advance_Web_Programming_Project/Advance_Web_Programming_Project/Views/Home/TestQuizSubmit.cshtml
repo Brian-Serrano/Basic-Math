@@ -1,0 +1,65 @@
+﻿@using Advance_Web_Programming_Project.Models.Others
+
+@{
+    ViewBag.Title = "Submission: " + ViewBag.Status;
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+@for (int i = 0; i < Model.Components.Count; i++)
+{
+    <p>Question: @Html.Raw(Model.Components[i][0])</p>
+    <p>Answer: @Model.Components[i][2]</p>
+    string icon = AnswerChecker.CheckAnswer(Model.Input[i], Model.Components[i][2], Model.Id[i]) ? "bi-check-circle-fill text-success" : "bi-x-circle-fill text-danger";
+    <p>Your Answer: @Model.Input[i]  <span class="bi @icon"></span></p>
+    string dbtargetName = "collapseExample" + i;
+    <div class="my-3">
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#@dbtargetName" aria-expanded="false" aria-controls="@dbtargetName">
+            <i class="bi bi-chevron-down"></i> Show Solution
+        </button>
+    </div>
+    <div class="collapse" id="@dbtargetName">
+        <div class="card card-body">
+            <p>@Html.Raw(Model.Components[i][1])</p>
+        </div>
+    </div>
+    <hr />
+}
+
+<a href="@Url.Action("Test", "Home")" class="btn btn-success">Take Quiz Again</a>
+<a href="@Url.Action("Index", "Home")" class="btn btn-success">Go To Home</a>
+
+@if (ViewBag.Achievement.Count != 0)
+{
+    <div class="modal" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Completed Achievements</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                @for (int i = 0; i < ViewBag.Achievement.Count; i++)
+                {
+                    <div class="modal-body">
+                        <h5>Achievement No @ViewBag.Achievement[i].Id: @ViewBag.Achievement[i].Name</h5>
+                        <p>@ViewBag.Achievement[i].Description</p>
+                    </div>
+                }
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts {
+        <script>
+            window.addEventListener('load', function () {
+                var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+                myModal.show();
+            });
+        </script>
+    }
+}

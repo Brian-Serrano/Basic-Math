@@ -1,0 +1,29 @@
+<p>In statistics, the exponential distribution is a continuous probability distribution that models the time between events in a Poisson process. It is often used to describe the time until the occurrence of a specific event, such as the waiting time for the next customer arrival at a service counter or the time until a radioactive particle decays.</p>
+<p>The exponential distribution is characterized by a single parameter, λ (lambda), which is the rate parameter. The rate parameter λ represents the average number of events per unit of time. The probability density function (PDF) of the exponential distribution is given by the formula:</p>
+<ul>
+    <li>f(x) = λ * e<sup>(-λx)</sup></li>
+</ul>
+<p>where:</p>
+<ul>
+    <li>f(x) is the probability density function at a given value x,</li>
+    <li>λ is the rate parameter, and</li>
+    <li>e is the base of the natural logarithm (approximately 2.71828).</li>
+</ul>
+<p>Here's an example that illustrates the exponential distribution:</p>
+<p>Example:</p>
+<p>Suppose customers arrive at a service counter according to a Poisson process with an average rate of 2 customers per minute. What is the probability that the next customer arrives within 3 minutes?</p>
+<p>Here, λ = 2 (rate parameter) and we want to calculate P(X &lt; 3), where X follows an exponential distribution.</p>
+<p>To calculate this probability, we use the exponential distribution formula:</p>
+<ul>
+    <li>P(X &lt; 3) = ∫[0 to 3] λ * e<sup>(-λx)</sup> dx</li>
+</ul>
+<p>The integral evaluates to:</p>
+<ul>
+    <li>P(X &lt; 3) = ∫[0 to 3] 2 * e<sup>(-λx)</sup> dx</li>
+    <li>= [-e<sup>(-2x)</sup>] [0 to 3]</li>
+    <li>= -e<sup>(-23)</sup> + e<sup>(-20)</sup></li>
+    <li>= -e<sup>(-6)</sup> + 1</li>
+    <li>≈ 0.9975</li>
+</ul>
+<p>So, the probability that the next customer arrives within 3 minutes is approximately 0.9975.</p>
+<p>The exponential distribution is widely used in various applications, such as reliability analysis, queueing theory, and survival analysis. It provides a useful tool for modeling continuous random variables when events occur independently and at a constant rate over time.</p>

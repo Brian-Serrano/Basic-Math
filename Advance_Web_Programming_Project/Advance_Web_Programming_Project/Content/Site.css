@@ -1,0 +1,93 @@
+﻿body {
+    padding-bottom: 20px;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.dropdown-toggle {
+    outline: 0;
+}
+
+.nav-link {
+    border-radius: 0;
+}
+
+.scrollarea {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 85vh;
+    overflow: auto;
+}
+
+.fw-semibold {
+    font-weight: 600;
+}
+
+.lh-tight {
+    line-height: 1.25;
+}
+
+.rounded-t-5 {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+@media (min-width: 992px) {
+    .rounded-tr-lg-0 {
+        border-top-right-radius: 0;
+    }
+
+    .rounded-bl-lg-5 {
+        border-bottom-left-radius: 0.5rem;
+    }
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.fraction {
+    display: inline-block;
+    text-align: center;
+}
+
+.fraction .numerator {
+    display: block;
+}
+
+.fraction .denominator {
+    display: block;
+    border-top: 1px solid black;
+}
+
+.fraction-container {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.fraction-container::before,
+.fraction-container::after {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    border-top: 1px solid black;
+}
+
+.fraction-container::before {
+    right: 100%;
+    margin-right: 10px;
+}
+
+.fraction-container::after {
+    left: 100%;
+    margin-left: 10px;
+}

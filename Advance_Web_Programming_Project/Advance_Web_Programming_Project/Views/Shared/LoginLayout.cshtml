@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Basic Math</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <section class=" text-center text-lg-start">
+        <div class="card m-5">
+            <div class="row g-0 d-flex align-items-center">
+                <div class="col-lg-6 d-none d-lg-flex">
+                    <img src="~/Assets/ball.png" alt="Learn Math Now"
+                         class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
+                </div>
+                <div class="col-lg-6">
+                    <div class="card-body py-5 px-md-5">
+
+                        <div class="text-center">
+                            <h2>@ViewBag.Title</h2>
+                        </div>
+
+                        <br /><br />
+
+                        @RenderBody()
+
+                        <div class="text-center">
+                            <a href="@Url.Action(ViewBag.Action)" class="no-underline">@ViewBag.Suggestion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

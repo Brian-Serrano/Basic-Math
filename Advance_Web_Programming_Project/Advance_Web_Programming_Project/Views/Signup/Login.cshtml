@@ -1,0 +1,31 @@
+﻿@model Advance_Web_Programming_Project.Models.Others.LoginUser
+
+@{
+    Layout = "~/Views/Shared/LoginLayout.cshtml";
+    ViewBag.Title = "Login";
+    ViewBag.Suggestion = "Do not have an account yet? Register.";
+    ViewBag.Action = "Register";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-floating mb-4">
+        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @type = "text", @id = "username" } })
+        @Html.LabelFor(model => model.Username, new { @class = "form-label" })
+        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-floating mb-4">
+        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password", @id = "password" } })
+        @Html.LabelFor(model => model.Password, new { @class = "form-label" })
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    </div>
+
+    <input type="submit" value="Sign in" class="btn btn-success col-12 mb-4" />
+
+    <p class="text-danger">@ViewBag.Message</p>
+}

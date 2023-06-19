@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = ViewBag.Courses[Model.Id].Display + " Leaderboard";
+}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Dashboard", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("StartTopic", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Topic</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("StartQuiz", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Quiz</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="@Url.Action("Leaderboard", "Course", new { Id = ViewBag.Courses[Model.Id].Id })">Leaderboard</a>
+    </li>
+</ul>
+
+<br />
+<br />
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12 mb-3 mb-lg-5">
+            <div class="card">
+                <div class="d-flex card-header justify-content-between">
+                    <h5 class="m-0">User</h5>
+                    <h5 class="m-0">Level</h5>
+                </div>
+                <div class="card-body py-0">
+                    <ul class="list-group list-group-flush">
+                        @for (int i = 0; i < Model.Username.Count; i++)
+                        {
+                            <li class="list-group-item p-0">
+                                <div class="row flex-nowrap">
+                                    <div class="col-1 p-3">
+                                        <h6 class="m-0">@(i + 1)</h6>
+                                    </div>
+                                    <div class="col-7 p-3">
+                                        <h6 class="m-0">@Model.Username[i]</h6>
+                                    </div>
+                                    <div class="col-4 text-end p-3">
+                                        <h6 class="m-0">@Model.Level[i]</h6>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<p>In statistics, the Poisson distribution is a discrete probability distribution that models the number of events that occur in a fixed interval of time or space. It is often used when the events happen randomly and independently, with an average rate of occurrence. The distribution is characterized by a single parameter, λ (lambda), which represents the average rate of occurrence of the events.</p>
+<p>The probability mass function (PMF) of the Poisson distribution is given by the formula:</p>
+<ul>
+    <li>P(X = k) = <span class="fraction-container"><span class="fraction"><span class="numerator">e<sup>(-λ)</sup> * λ<sup>k</sup></span><span class="denominator">k!</span></span></span></li>
+</ul>
+<p>where:</p>
+<ul>
+    <li>P(X = k) is the probability of exactly k events occurring in the interval,</li>
+    <li>e is the base of the natural logarithm (approximately 2.71828),</li>
+    <li>λ is the average rate of occurrence of events, and</li>
+    <li>k is the number of events.</li>
+</ul>
+<p>Here are a couple of examples that illustrate the Poisson distribution:</p>
+<p>Example 1:</p>
+<p>In a manufacturing process, an average of 3 defective items are produced per hour. What is the probability of exactly 2 defective items in a randomly selected hour?</p>
+<p>Here, λ = 3 (average rate of defective items per hour) and we want to calculate P(X = 2), where X follows a Poisson distribution.</p>
+<ul>
+    <li>P(X = 2) = <span class="fraction-container"><span class="fraction"><span class="numerator">e<sup>(-3)</sup> * 3<sup>2</sup></span><span class="denominator">2!</span></span></span></li>
+    <li>= <span class="fraction-container"><span class="fraction"><span class="numerator">0.0498 * 9</span><span class="denominator">2</span></span></span></li>
+    <li>≈ 0.1494</li>
+</ul>
+<p>So, the probability of exactly 2 defective items in an hour is approximately 0.1494.</p>
+<p>Example 2:</p>
+<p>On average, a call center receives 6 customer complaints per day. What is the probability of receiving more than 10 customer complaints in a randomly selected day?</p>
+<p>Here, λ = 6 (average rate of customer complaints per day) and we want to calculate P(X > 10).</p>
+<p>P(X > 10) = 1 - P(X ≤ 10)</p>
+<p>= 1 - [P(X = 0) + P(X = 1) + ... + P(X = 10)]</p>
+<p>You can compute the probabilities for each value using the Poisson formula and subtract them from 1 to find the result.</p>
+<p>The Poisson distribution is commonly used in various applications, such as modeling rare events, analyzing queues and waiting times, and predicting event occurrences in areas like telecommunications and insurance.</p>

@@ -1,0 +1,196 @@
+﻿@{
+    ViewBag.Title = "Buy Courses";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<div class="container">
+    <div class="row">
+        @for (int i = 0; i < ViewBag.Courses.Count; i++)
+        {
+            <div class="col-xl-4 col-md-6 col-12 mt-4 pt-2">
+                <div class="card border-0 bg-light rounded shadow h-100">
+                    <div class="card-body p-4">
+                        <img src="@Url.Content("~/Assets/book.png")" alt="" width="235" height="375" class="d-none" />
+                        <div class="image-text d-none">@ViewBag.Courses[i].Display</div>
+                        <canvas class="mb-4 col-12"></canvas>
+                        @if (ViewBag.Data.Levels[i] == 0)
+                        {
+                            <span class="badge rounded-pill bg-primary float-md-end mb-3 mb-sm-0">@ViewBag.Courses[i].Cost <i class="bi bi-star-fill"></i></span>
+                        }
+                        else
+                        {
+                            <span class="badge rounded-pill bg-success float-md-end mb-3 mb-sm-0">Owned</span>
+                        }
+                        <h5>@ViewBag.Courses[i].Display</h5>
+                        <div class="mt-3">
+                            <span class="text-muted d-block">@ViewBag.Courses[i].TagLine</span>
+                        </div>
+
+                        <div class="mt-3">
+                            @if (ViewBag.Data.Levels[i] == 0)
+                            {
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-title="@ViewBag.Courses[i].Display" data-bs-cost="@ViewBag.Courses[i].Cost" data-bs-id="@ViewBag.Courses[i].Id">
+                                    Buy Course
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-primary">
+                                    Course Owned
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="buy">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="div-appender">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="errorModalMessage"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        var exampleModal = document.getElementById('myModal');
+        var topicId;
+        var title;
+        var cost;
+
+        function appendAchievementToModal(achievement, modalContent) {
+            var header = document.createElement('div');
+            header.innerHTML = `<div class="modal-header"><h4 class="modal-title" id="exampleModalLabel">Completed Achievements</h4></div>`;
+            modalContent.appendChild(header);
+            achievement.forEach(ach => {
+                var div = document.createElement('div');
+                div.innerHTML = `<div class="modal-body"><h5>Achievement No ${ach.Id}: ${ach.Name}</h5><p>${ach.Description}</p></div>`;
+                modalContent.appendChild(div);
+            });
+        }
+
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+
+            title = button.getAttribute('data-bs-title');
+            cost = button.getAttribute('data-bs-cost');
+            topicId = button.getAttribute('data-bs-id');
+
+            var modalTitle = exampleModal.querySelector('.modal-title');
+            var modalBody = exampleModal.querySelector('.modal-body p');
+
+            modalTitle.textContent = title;
+            modalBody.textContent = "Are you sure you want to buy " + title + " course for " + cost + " points.";
+        });
+
+        $(function () {
+            $('#buy').click(function () {
+                $.ajax({
+                    url: '/Home/Buy',
+                    type: 'POST',
+                    data: { Id: topicId },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#errorModalMessage').text("You have successfully bought " + title + " course. Reload the page to see the changes.");
+                            $('#errorModalLabel').text("Course Bought");
+                            $('#errorModal').modal('show');
+                            if (response.achievement.length != 0) {
+                                appendAchievementToModal(response.achievement, document.querySelector('#div-appender'));
+                            }
+                        }
+                        else {
+                            $('#errorModalMessage').text("You do not have enough points to buy " + title + " course.");
+                            $('#errorModalLabel').text("Sorry");
+                            $('#errorModal').modal('show');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error tracking time: ' + error);
+                    }
+                });
+            });
+        });
+        window.addEventListener('load', function () {
+            var canvasList = document.querySelectorAll('canvas');
+            var imageList = document.querySelectorAll('img');
+            var imageTextList = document.querySelectorAll('.image-text');
+            var fontSize = 25;
+            var lineHeight = 30;
+
+            for (var i = 0; i < canvasList.length; i++) {
+                var context = canvasList[i].getContext('2d');
+
+                canvasList[i].width = imageList[i].width;
+                canvasList[i].height = imageList[i].height;
+                context.drawImage(imageList[i], 0, 0, imageList[i].width, imageList[i].height);
+
+                context.font = 'bold ' + fontSize + 'px Serif';
+                context.fillStyle = '#262626';
+                context.textAlign = "center";
+
+                var maxWidth = canvasList[i].width - lineHeight;
+                var text = imageTextList[i].textContent;
+
+                var lines = getLines(context, text, maxWidth);
+
+                for (var j = 0; j < lines.length; j++) {
+                    var x = canvasList[i].width / 2;
+                    var y = ((canvasList[i].height - (lines.length * lineHeight)) / 2) + (j * lineHeight) + fontSize;
+                    context.fillText(lines[j], x, y);
+                }
+            }
+
+            function getLines(ctx, text, maxWidth) {
+                var words = text.split(" ");
+                var lines = [];
+                var currentLine = words[0];
+
+                for (var i = 1; i < words.length; i++) {
+                    var word = words[i];
+                    var width = ctx.measureText(currentLine + " " + word).width;
+                    if (width < maxWidth) {
+                        currentLine += " " + word;
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word;
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+        });
+    </script>
+}

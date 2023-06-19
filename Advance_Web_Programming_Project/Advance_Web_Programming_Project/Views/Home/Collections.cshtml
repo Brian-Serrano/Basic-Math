@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.Title = "Collections";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<h4 class="text-center mt-5">Badges</h4>
+<div class="container d-flex justify-content-center">
+    <ul class="list-group text-white">
+        @for (int i = 0; i < Model.GetTitle().Count; i++)
+        {
+            if (ViewBag.Data.CompletedAchievements[i] == 1)
+            {
+                <li class="list-group-item d-flex justify-content-between align-content-center">
+                    <div class="d-flex flex-row">
+                        <div class="col-auto image-container">
+                            <img src="@Url.Content(Model.GetImagePath()[i])" alt="" width="138" height="113" class="d-none image-badge" />
+                            <div class="d-none image-text-badge">@Model.GetImageText()[i]</div>
+                            <canvas class="canvas-badge"></canvas>
+                        </div>
+                        <div class="ml-2 m-auto">
+                            <h6 class="mb-0">@Model.GetTitle()[i]</h6>
+                            <div class="about">
+                                <span>@Model.GetDescription()[i]</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<h4 class="text-center mt-5">Certificates</h4>
+<div class="container d-flex justify-content-center">
+    <ul class="list-group text-white">
+        @for (int i = 0; i < ViewBag.Courses.Count; i++)
+        {
+            if (ViewBag.Data.CollectedCertificate[i] == 1)
+            {
+                <li class="list-group-item d-flex justify-content-between align-content-center">
+                    <div class="d-flex flex-row">
+                        <div class="col-auto image-container m-3">
+                            <img src="@Url.Content("~/Assets/certificate.png")" alt="" width="250" height="176" class="d-none image-certificate" />
+                            <div class="image-text-certificate d-none">@ViewBag.Courses[i].Display</div>
+                            <div class="image-text-name d-none">@ViewBag.Data.Username</div>
+                            <canvas class="canvas-certificate"></canvas>
+                        </div>
+                        <div class="ml-2 m-auto">
+                            <h6 class="mb-0">@ViewBag.Courses[i].Display</h6>
+                            <div class="about">
+                                <span>Reach level 20 in @ViewBag.Courses[i].Display course</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+<br />
+
+@section scripts {
+    <script>
+        window.addEventListener('load', function () {
+            var canvasList = document.querySelectorAll('.canvas-badge');
+            var imageList = document.querySelectorAll('.image-badge');
+            var imageTextList = document.querySelectorAll('.image-text-badge');
+            var fontSize = 15;
+            var lineHeight = 20;
+
+            for (var i = 0; i < canvasList.length; i++) {
+                var context = canvasList[i].getContext('2d');
+
+                canvasList[i].width = imageList[i].width;
+                canvasList[i].height = imageList[i].height;
+                context.drawImage(imageList[i], 0, 0, imageList[i].width, imageList[i].height);
+
+                context.font = 'bold ' + fontSize + 'px Comic Sans MS';
+                context.fillStyle = '#003300';
+                context.textAlign = "center";
+
+                var maxWidth = canvasList[i].width - lineHeight;
+                var text = imageTextList[i].textContent;
+
+                var lines = getLines(context, text, maxWidth);
+
+                for (var j = 0; j < lines.length; j++) {
+                    var x = canvasList[i].width / 2;
+                    var y = ((canvasList[i].height - (lines.length * lineHeight)) / 2) + (j * lineHeight) + fontSize;
+                    context.fillText(lines[j], x, y);
+                }
+            }
+
+            var canvasCertificate = document.querySelectorAll('.canvas-certificate');
+            var imageCertificate = document.querySelectorAll('.image-certificate');
+            var imageTextCertificate = document.querySelectorAll('.image-text-certificate');
+            var imageTextName = document.querySelectorAll('.image-text-name');
+            var fontSizeCer = 10;
+
+            for (var i = 0; i < canvasCertificate.length; i++) {
+                var context = canvasCertificate[i].getContext('2d');
+
+                canvasCertificate[i].width = imageCertificate[i].width;
+                canvasCertificate[i].height = imageCertificate[i].height;
+                context.drawImage(imageCertificate[i], 0, 0, imageCertificate[i].width, imageCertificate[i].height);
+
+                context.font = 'bold ' + fontSizeCer + 'px Serif';
+                context.fillStyle = '#262626';
+                context.textAlign = "center";
+
+                context.fillText(imageTextCertificate[i].textContent, canvasCertificate[i].width / 2, 37);
+                context.fillText(imageTextName[i].textContent, canvasCertificate[i].width / 2, 80);
+            }
+
+            function getLines(ctx, text, maxWidth) {
+                var words = text.split(" ");
+                var lines = [];
+                var currentLine = words[0];
+
+                for (var i = 1; i < words.length; i++) {
+                    var word = words[i];
+                    var width = ctx.measureText(currentLine + " " + word).width;
+                    if (width < maxWidth) {
+                        currentLine += " " + word;
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word;
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            }
+        });
+    </script>
+}

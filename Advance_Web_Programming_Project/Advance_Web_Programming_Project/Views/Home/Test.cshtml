@@ -1,0 +1,99 @@
+﻿@model Advance_Web_Programming_Project.Models.Others.Test
+
+@{
+    ViewBag.Title = "Test";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<div class="container">
+    @using (Html.BeginForm("Test", "Home", FormMethod.Post))
+    {
+        <div class="card col-md-12 col-xl-6">
+            <div class="card-body">
+                <h5 class="card-title m-0">Topics</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                @for (int i = 0; i < ViewBag.Courses.Count; i++)
+                {
+                    if (ViewBag.Data.Levels[i] > 0)
+                    {
+                        <li class="list-group-item">
+                            <div>
+                                @Html.CheckBoxFor(m => m.Topics[i])
+                                @Html.LabelFor(m => m.Topics[i], (string)ViewBag.Courses[i].Display)
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">
+                            <div>
+                                @Html.CheckBoxFor(m => m.Topics[i], new { disabled = ViewBag.Data.Levels[i] == 0 })
+                                @Html.LabelFor(m => m.Topics[i], (string)ViewBag.Courses[i].Display, new { @class = "text-muted" })
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+            <div class="card-body">
+                <h5 class="card-title m-0">Difficulty: <span id="difficulty-amount">1</span></h5>
+                @Html.HiddenFor(m => m.Difficulty)
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item p-3"><div id="difficulty-slider"></div></li>
+            </ul>
+            <div class="card-body">
+                <h5 class="card-title m-0">Number of questions: <span id="items-amount">10</span></h5>
+                @Html.HiddenFor(m => m.Items)
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item p-3"><div id="items-slider"></div></li>
+            </ul>
+        </div>
+        <input type="submit" value="Start Quiz" name="submit" class="btn btn-success m-3" />
+        <p class="text-danger" id="error-message"></p>
+    }
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function () {
+                if ($("input[type=checkbox]:checked").length === 0) {
+                    $("#error-message").text("Please select at least one topic");
+                    return false;
+                }
+            });
+        });
+        $(function () {
+            $("#difficulty-slider").slider({
+                range: "min",
+                value: 1,
+                min: 1,
+                max: 6,
+                slide: function (event, ui) {
+                    $("#difficulty-amount").text(ui.value);
+                    $("#Difficulty").val(ui.value);
+                }
+            });
+            $("#difficulty-amount").text($("#difficulty-slider").slider("value"));
+            $("#Difficulty").val($("#difficulty-slider").slider("value"));
+        });
+        $(function () {
+            $("#items-slider").slider({
+                range: "min",
+                value: 10,
+                min: 5,
+                max: 50,
+                slide: function (event, ui) {
+                    $("#items-amount").text(ui.value);
+                    $("#Items").val(ui.value);
+                }
+            });
+            $("#items-amount").text($("#items-slider").slider("value"));
+            $("#Items").val($("#items-slider").slider("value"));
+        });
+    </script>
+}

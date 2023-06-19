@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Start " + ViewBag.Courses[Model].Display + " Quiz";
+}
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Dashboard", "Course", new { Id = ViewBag.Courses[Model].Id })">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("StartTopic", "Course", new { Id = ViewBag.Courses[Model].Id })">Topic</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="@Url.Action("StartQuiz", "Course", new { Id = ViewBag.Courses[Model].Id })">Quiz</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("Leaderboard", "Course", new { Id = ViewBag.Courses[Model].Id })">Leaderboard</a>
+    </li>
+</ul>
+
+<br />
+<br />
+<h2>@ViewBag.Title</h2>
+<hr />
+<p>The quiz is not timed but you cannot pause it. If you leave while on the quiz, it will be totally discarded.</p>
+<a href="@Url.Action("Quiz", "Course", new { Id = Model })" class="btn btn-success">Start Quiz</a>
+@if (ViewBag.Courses[Model].Id == 9)
+{
+    <div class="my-3">
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <i class="bi bi-chevron-down"></i> How to answer in Algebra
+        </button>
+    </div>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+            <p>
+                How can I answer in algebra?<br />1. Ordering and spaces doesnt matter you still get correct answer. For example Answer = (x^2 + 2)(3x - 1), Input = (-1 + 3x)(x^2+2) is still correct answer. You can also omit the parenthesis to one of the expressions enclosed with parenthesis. For example Answer = (x^2 + 2)(3x - 1), Input = (x^2 + 2)3x - 1 that still get correct answer. That might not be the similar to the correct answer but my system will automatically wrap that if there are no parenthesis with parenthesis. You cant omit parenthesis for two sticking expression, "x^2 + 2 3x - 1, x^2 + 2 * 3x - 1" both of them are wrong. However you can omit for alternate group of expressions like "no parenthesis (with parenthesis) no parenthesis (with parenthesis) no parenthesis".<br />2. If the answer is like this (x^2 + 4)^2 you can also do this (x^2 + 4)(x^2 + 4) that still a correct answer. Do not put ^3 that will be wrong answer.<br />3. In multiplying expressions, you can put or omit the parenthesis in the answer expression.<br />4. In GCF factoring, this answer 6(3x + 2y - 5) can also be this (6)(3x + 2y - 5) that still correct answer.<br />5. In solve for x, the two answers should be seperated by comma like this (2.5, -1) you can also omit the parenthesis.
+            </p>
+        </div>
+    </div>
+}
+@if (ViewBag.Courses[Model].Id == 10)
+{
+    <div class="my-3">
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <i class="bi bi-chevron-down"></i> How to answer in Sets
+        </button>
+    </div>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+            <p>
+                How can I answer in sets?<br />1. If the answer is like this { 1, 2, 4, 5, 3, 7, 6 } you always need to enclose it with curly brackets to get the correct answer. Spaces doesnt matter, if you didnt put space between the numbers its okay you still get the correct answer. Ordering doesnt matter, if you input an answer different in the ordering of the correct answer its okay you still get the correct answer. Make sure you always seperate the numbers with comma or you will get the wrong answer.<br />2. If the answer is like this &#123;&#123; 8, 6 }, { 2, 3 }, { 5, 7 }} you can omit the curly brackets at the beginning and end of the expression, you can also omit the comma seperating each group of numbers enclosed with curly brackets. Remember, if you remove the comma seperating numbers or put other characters as seperator it will make it wrong answer. Spaces and ordering doesnt matter.<br />3. If you encounter power sets there is always a combination that has no elements. If there are no elements you can just leave the element like this { }.
+            </p>
+        </div>
+    </div>
+}
