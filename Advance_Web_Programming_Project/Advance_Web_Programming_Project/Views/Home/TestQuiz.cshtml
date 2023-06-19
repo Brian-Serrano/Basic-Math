@@ -15,7 +15,6 @@
                 string questionName = "Question " + (i + 1);
                 <h4>@questionName</h4>
                 <p>@Html.Raw(Model.Components[i][0])</p>
-                <p>@Model.Components[i][2]</p>
                 <h4>Answer: </h4>
                 @Html.HiddenFor(m => m.Components[i][0])
                 @Html.HiddenFor(m => m.Components[i][1])
