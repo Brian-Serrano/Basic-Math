@@ -27,8 +27,8 @@ Advance Web Programming Project made with ASP.NET MVC
 10. Some courses like algebra and sets are hard to predict answer because of ordering and some unexpected spaces. The system will check for that and your input will consider it correct even in different ordering and some random spacing as long as it is match to the answer.
 11. There is a test feature that you can specify the topics, items and difficulty of a quiz you want to take.
 ## Setup
-Create Database `CREATE DATABASE BasicMath;`
-Create Table `CREATE TABLE [dbo].[Table] (
+1. Create Database `CREATE DATABASE BasicMath;`
+2. Create Table `CREATE TABLE [dbo].[Table] (
 Id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 Username varchar(50) NOT NULL,
 Email varchar(50) NOT NULL,
